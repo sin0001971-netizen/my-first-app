@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+    --ink: #e9f1ff;
+    --muted: #8290ad;
+    --line: rgba(141, 161, 203, .18);
+    --panel: #111827;
+    --cyan: #47e8d4;
+    --yellow: #ffd166;
+    --purple: #9b8cff;
+}
+
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--ink);
+    background: #080b13;
+    font-family: 'Barlow Condensed', sans-serif;
+    background-image: radial-gradient(circle at 15% 5%, rgba(53, 72, 125, .22), transparent 31rem), linear-gradient(135deg, #080b13, #0e1423 52%, #080b13);
+}
+button { font: inherit; }
+.game-shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 28px; }
+.topbar, .hud, .instructions, .brand, .status, .hud-group { display: flex; align-items: center; }
+.topbar { justify-content: space-between; margin-bottom: 24px; }
+.brand { gap: 13px; }
+.brand-mark { display: grid; place-items: center; width: 42px; height: 42px; color: #071016; background: var(--cyan); font-size: 26px; font-weight: 800; border-radius: 8px 8px 8px 2px; box-shadow: 4px 4px 0 rgba(71,232,212,.15); }
+.eyebrow, h1, p { margin: 0; }
+.eyebrow { color: var(--cyan); font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: .16em; }
+h1 { margin-top: 2px; font-size: 30px; line-height: 1; letter-spacing: .08em; }
+.status { gap: 22px; color: var(--muted); font: 10px 'Space Mono', monospace; letter-spacing: .08em; }
+.dot { display: inline-block; width: 6px; height: 6px; margin-right: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
+.restart-button { padding: 8px 12px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 4px; cursor: pointer; }
+.restart-button:hover { border-color: var(--cyan); color: var(--cyan); }
+.game-card { overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: rgba(17, 24, 39, .86); box-shadow: 0 28px 80px rgba(0,0,0,.38); }
+.hud { justify-content: space-between; min-height: 71px; padding: 0 24px; border-bottom: 1px solid var(--line); background: rgba(11, 17, 29, .8); }
+.hud-group { gap: 35px; }
+.hud-item { min-width: 83px; }
+.hud-label { display: block; margin-bottom: 3px; color: var(--muted); font: 10px 'Space Mono', monospace; letter-spacing: .1em; }
+.hud strong { font: 700 18px 'Space Mono', monospace; letter-spacing: .02em; }
+#energy { color: var(--yellow); letter-spacing: 5px; font-size: 16px; }
+.objective { text-align: center; }
+.objective strong { color: #dce5fa; font: 12px 'Space Mono', monospace; }
+.progress-item { text-align: right; }
+.progress-item strong { color: var(--cyan); }
+.canvas-wrap { position: relative; aspect-ratio: 16 / 7.8; min-height: 300px; background: #131b32; }
+canvas { display: block; width: 100%; height: 100%; }
+.message { position: absolute; inset: 0; display: grid; place-content: center; gap: 8px; text-align: center; background: rgba(8, 11, 19, .76); backdrop-filter: blur(4px); }
+.message h2 { margin: 0; color: var(--cyan); font-size: 44px; letter-spacing: .08em; }
+.message p { color: var(--ink); font: 12px 'Space Mono', monospace; }
+.is-hidden { display: none; }
+.instructions { gap: 22px; padding-top: 16px; color: var(--muted); font: 11px 'Space Mono', monospace; }
+kbd { display: inline-block; min-width: 23px; margin-right: 4px; padding: 3px 5px; color: var(--ink); text-align: center; border: 1px solid var(--line); border-radius: 3px; background: var(--panel); }
+.tip { margin-left: auto; color: #aeb9d1; }
+.mobile-controls { display: none; }
+
+@media (max-width: 680px) {
+    .game-shell { width: calc(100% - 20px); padding-top: 18px; }
+    h1 { font-size: 24px; }
+    .status > span, .objective, .instructions span:not(.tip) kbd { display: none; }
+    .hud { min-height: 62px; padding: 0 13px; }
+    .hud-group { gap: 12px; }
+    .hud-item { min-width: 70px; }
+    .hud strong { font-size: 14px; }
+    .canvas-wrap { aspect-ratio: 1 / .82; min-height: 280px; }
+    .mobile-controls { display: flex; gap: 8px; padding: 12px; background: #0b111d; }
+    .control-button { width: 46px; height: 38px; color: var(--ink); background: #192238; border: 1px solid var(--line); border-radius: 5px; font-size: 20px; }
+    .jump-button { margin-left: auto; color: var(--cyan); }
+    .attack-button { color: var(--yellow); }
+    .instructions { display: none; }
+}

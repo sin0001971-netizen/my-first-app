@@ -1,11 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEON RUNNER | 横スクロールアクション</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    ようこそ私のページへ！
+    <main class="game-shell">
+        <header class="topbar">
+            <div class="brand">
+                <span class="brand-mark">N</span>
+                <div>
+                    <p class="eyebrow">MINI ACTION / MVP</p>
+                    <h1>NEON RUNNER</h1>
+                </div>
+            </div>
+            <div class="status">
+                <span><i class="dot"></i> SYSTEM ONLINE</span>
+                <button id="restartButton" class="restart-button" type="button">↻ リスタート</button>
+            </div>
+        </header>
+
+        <section class="game-card" aria-label="NEON RUNNER ゲーム画面">
+            <div class="hud">
+                <div class="hud-group">
+                    <div class="hud-item"><span class="hud-label">SCORE</span><strong id="score">000000</strong></div>
+                    <div class="hud-item"><span class="hud-label">ENERGY</span><strong id="energy">♥♥♥</strong></div>
+                </div>
+                <div class="objective"><span class="hud-label">OBJECTIVE</span><strong>GATE 01 / REACH THE EXIT</strong></div>
+                <div class="hud-item progress-item"><span class="hud-label">DISTANCE</span><strong id="distance">0%</strong></div>
+            </div>
+            <div class="canvas-wrap">
+                <canvas id="gameCanvas" aria-label="横スクロールアクションゲーム"></canvas>
+                <div id="message" class="message is-hidden" role="status"></div>
+            </div>
+            <div class="mobile-controls" aria-label="モバイル操作">
+                <button class="control-button" data-key="left" aria-label="左へ">←</button>
+                <button class="control-button jump-button" data-key="jump" aria-label="ジャンプ">▲</button>
+                <button class="control-button" data-key="right" aria-label="右へ">→</button>
+                <button class="control-button attack-button" data-key="attack" aria-label="攻撃">✦</button>
+            </div>
+        </section>
+
+        <footer class="instructions">
+            <span><kbd>A</kbd><kbd>D</kbd> 移動</span>
+            <span><kbd>SPACE</kbd> ジャンプ</span>
+            <span><kbd>J</kbd> 攻撃</span>
+            <span class="tip">黄色のエネルギーセルを集めて出口へ向かおう</span>
+        </footer>
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
