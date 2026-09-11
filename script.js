@@ -130,20 +130,78 @@ function draw() {
 }
 
 function drawBackground(w, h) {
-    ctx.fillStyle = 'rgba(103, 124, 179, .13)';
-    for (let x = -200; x < world.width; x += 180) { const offset = (x * .08) % 80; ctx.beginPath(); ctx.moveTo(x, world.ground - 40); ctx.lineTo(x + 70, world.ground - 170 - offset); ctx.lineTo(x + 165, world.ground - 40); ctx.fill(); }
-    ctx.strokeStyle = 'rgba(71, 232, 212, .08)'; ctx.lineWidth = 1;
-    for (let x = 0; x < world.width; x += 80) { ctx.beginPath(); ctx.moveTo(x, world.ground); ctx.lineTo(x + 180, 0); ctx.stroke(); }
+    const horizon = world.ground - 135;
+    const glow = ctx.createRadialGradient(w * .48 + cameraX, horizon, 10, w * .48 + cameraX, horizon, 340);
+    glow.addColorStop(0, 'rgba(119, 105, 255, .2)');
+    glow.addColorStop(1, 'rgba(119, 105, 255, 0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(cameraX - 40, 0, w + 80, world.ground);
+
+    ctx.fillStyle = '#d8e7ff';
+    for (let x = -100; x < world.width; x += 137) {
+        const y = 30 + ((x * 17) % 120 + 120) % 120;
+        ctx.globalAlpha = .25 + (((x * 7) % 4 + 4) % 4) * .12;
+        ctx.fillRect(x, y, 2, 2);
+    }
+    ctx.globalAlpha = 1;
+
+    for (let x = -160; x < world.width; x += 145) {
+        const height = 55 + ((x * 13) % 100 + 100) % 100;
+        const buildingTop = horizon - height;
+        ctx.fillStyle = 'rgba(20, 32, 65, .88)';
+        ctx.fillRect(x, buildingTop, 112, height);
+        ctx.fillStyle = 'rgba(81, 246, 220, .3)';
+        for (let windowY = buildingTop + 15; windowY < horizon - 10; windowY += 18) {
+            ctx.fillRect(x + 15, windowY, 4, 6);
+            ctx.fillRect(x + 37, windowY, 4, 6);
+            ctx.fillStyle = 'rgba(255, 209, 102, .25)';
+            ctx.fillRect(x + 76, windowY + 4, 4, 5);
+            ctx.fillStyle = 'rgba(81, 246, 220, .3)';
+        }
+    }
+    ctx.fillStyle = 'rgba(8, 14, 32, .9)';
+    ctx.fillRect(-100, horizon, world.width + 200, world.ground - horizon);
+    ctx.strokeStyle = 'rgba(81, 246, 220, .09)';
+    ctx.lineWidth = 1;
+    for (let x = -100; x < world.width + 160; x += 80) {
+        ctx.beginPath(); ctx.moveTo(x, world.ground); ctx.lineTo(x + 180, horizon); ctx.stroke();
+    }
+    for (let y = horizon + 28; y < world.ground; y += 28) {
+        ctx.beginPath(); ctx.moveTo(-100, y); ctx.lineTo(world.width + 100, y); ctx.stroke();
+    }
 }
 function drawPlayer() {
     if (player.invincible > 0 && Math.floor(player.invincible * 14) % 2 === 0) return;
-    ctx.fillStyle = '#47e8d4'; ctx.fillRect(player.x, player.y, player.w, player.h);
-    ctx.fillStyle = '#08131d'; ctx.fillRect(player.x + (player.facing > 0 ? 17 : 4), player.y + 9, 6, 5);
-    ctx.fillStyle = '#9b8cff'; ctx.fillRect(player.x + 5, player.y + 31, 17, 6);
+    ctx.save();
+    ctx.shadowColor = '#51f6dc'; ctx.shadowBlur = 18;
+    ctx.fillStyle = '#51f6dc'; ctx.fillRect(player.x + 3, player.y + 8, player.w - 6, player.h - 8);
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#a88bff'; ctx.fillRect(player.x + 5, player.y + 30, 17, 7);
+    ctx.fillStyle = '#d8fff9'; ctx.fillRect(player.x + 5, player.y + 8, 17, 5);
+    ctx.fillStyle = '#101a35'; ctx.fillRect(player.x + (player.facing > 0 ? 16 : 5), player.y + 14, 7, 6);
+    ctx.fillStyle = '#ffd166'; ctx.fillRect(player.x + (player.facing > 0 ? 20 : 4), player.y + 15, 2, 3);
+    ctx.fillStyle = '#293b73'; ctx.fillRect(player.x + 1, player.y + 20, 4, 11); ctx.fillRect(player.x + 22, player.y + 20, 4, 11);
+    ctx.restore();
     if (player.attack > 0) { ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 4; ctx.beginPath(); const start = player.facing > 0 ? player.x + 22 : player.x + 5; ctx.arc(start + player.facing * 11, player.y + 20, 19, player.facing > 0 ? -.9 : 2.2, player.facing > 0 ? .9 : 4, player.facing < 0); ctx.stroke(); }
 }
-function drawEnemy(enemy) { ctx.fillStyle = '#f45b69'; ctx.fillRect(enemy.x, world.ground + enemy.y - enemy.h, enemy.w, enemy.h); ctx.fillStyle = '#241526'; ctx.fillRect(enemy.x + 6, world.ground + enemy.y - 22, 6, 5); ctx.fillRect(enemy.x + 19, world.ground + enemy.y - 22, 6, 5); }
-function drawExit() { const x = world.width - 105; ctx.fillStyle = '#9b8cff'; ctx.fillRect(x, world.ground - 116, 68, 116); ctx.fillStyle = '#0e1423'; ctx.fillRect(x + 10, world.ground - 101, 48, 101); ctx.fillStyle = '#47e8d4'; ctx.fillRect(x + 21, world.ground - 72, 26, 3); ctx.fillRect(x + 21, world.ground - 61, 26, 3); }
+function drawEnemy(enemy) {
+    const y = world.ground + enemy.y - enemy.h;
+    ctx.save(); ctx.shadowColor = '#f45b69'; ctx.shadowBlur = 14;
+    ctx.fillStyle = '#f45b69'; ctx.fillRect(enemy.x + 3, y + 5, enemy.w - 6, enemy.h - 5);
+    ctx.shadowBlur = 0; ctx.fillStyle = '#421d40'; ctx.fillRect(enemy.x + 5, y + 11, 20, 9);
+    ctx.fillStyle = '#ffd166'; ctx.fillRect(enemy.x + 8, y + 13, 4, 4); ctx.fillRect(enemy.x + 18, y + 13, 4, 4);
+    ctx.fillStyle = '#8d3b78'; ctx.fillRect(enemy.x, y + 25, 5, 7); ctx.fillRect(enemy.x + 25, y + 25, 5, 7);
+    ctx.restore();
+}
+function drawExit() {
+    const x = world.width - 105;
+    ctx.save(); ctx.shadowColor = '#a88bff'; ctx.shadowBlur = 24;
+    ctx.fillStyle = '#a88bff'; ctx.fillRect(x, world.ground - 116, 68, 116);
+    ctx.shadowBlur = 0; ctx.fillStyle = '#0e1423'; ctx.fillRect(x + 10, world.ground - 101, 48, 101);
+    ctx.fillStyle = '#51f6dc'; ctx.fillRect(x + 21, world.ground - 72, 26, 3); ctx.fillRect(x + 21, world.ground - 61, 26, 3);
+    ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 2; ctx.strokeRect(x - 6, world.ground - 122, 80, 8);
+    ctx.restore();
+}
 
 function loop(time) {
     const dt = Math.min(.033, (time - lastTime) / 1000 || .016); lastTime = time;
